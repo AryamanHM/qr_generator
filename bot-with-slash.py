@@ -1,21 +1,26 @@
 import discord
 import qrcode
+from discord.ext import commands
+from discord import app_commands
 import os
 from keep_alive import keep_alive
 
-client =discord.Client(command_prefix='!',intents=discord.Intents.all())
+client =discord.Client(intents=discord.Intents.all())
+tree = discord.app_commands.CommandTree(client)
 @client.event
 async def on_command_error(ctx, error):
   await ctx.send(f"An error occured: {str(error)}")
 @client.event
 async def on_ready():
+  await tree.sync(guild=discord.Object(id=865202347038605362))
   print(f"I am ready to go - {client.user.name}")
   await client.change_presence(activity=discord.Activity(
-      type=discord.ActivityType.watching, name=f'Eras Tour'))
-@client.command(name="ping")
+      type=discord.ActivityType.watching, name=f'Barbenheimer'))
+@tree.command(name="ping",description="Displays server ping.",
+             guild=discord.Object(id=865202347038605362))
 async def _ping(interaction: discord.Interaction):
   await interaction.response.send_message(f"Ping: {client.latency}")
-@client.command(name="qr")
+@tree.command(name="qr",description="Generates a QR with slash commands",guild=discord.Object(id=865202347038605362))
 async def _command(interaction: discord.Interaction, url: str):
   qr = qrcode.QRCode(version=1,
              error_correction=qrcode.constants.ERROR_CORRECT_L,
