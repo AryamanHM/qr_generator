@@ -13,10 +13,10 @@ async def on_ready():
   await client.change_presence(activity=discord.Activity(
       type=discord.ActivityType.watching, name=f'Eras Tour'))
 @client.command(name="ping")
-async def _ping(interaction: discord.Interaction):
-  await interaction.response.send_message(f"Ping: {client.latency}")
+async def _ping(ctx):
+  await ctx.send(f"Ping: {client.latency}")
 @client.command(name="qr")
-async def _command(interaction: discord.Interaction, url: str):
+async def _command(ctx,url):
   qr = qrcode.QRCode(version=1,
              error_correction=qrcode.constants.ERROR_CORRECT_L,
              box_size=50,
@@ -34,7 +34,7 @@ async def _command(interaction: discord.Interaction, url: str):
   embed.set_image(url="attachment://qr.png")
   
   # Send the embed with the attached image
-  await interaction.response.send_message(embed=embed, file=file)
+  await ctx.send(embed=embed, file=file)
 
 keep_alive()
 my_secret = os.environ['TOKEN']
